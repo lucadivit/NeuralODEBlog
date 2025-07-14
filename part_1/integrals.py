@@ -13,9 +13,11 @@ print(f"v'({instant}) = s({instant}) = ", defined_integral)
 
 print("---- Infinite Riemann Sum ----")
 
+# Defining v(t) function
 def v(t):
     return 2*t
 
+# n -> oo
 def riemann_sum(f, a, b, n=10000):
     dx = (a - b) / n
     sum_areas = 0
@@ -24,4 +26,5 @@ def riemann_sum(f, a, b, n=10000):
         sum_areas += f(i * dx) * dx
     return sum_areas
 
+# v' = s evaluation
 print(f"v'({instant}) = s({instant}) = ", riemann_sum(f=v, a=2, b=0))

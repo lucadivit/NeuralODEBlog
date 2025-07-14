@@ -21,13 +21,13 @@ print("---- Difference Quotient Solution ----")
 def s(t):
     return -t**2 + 10*t
 
-# h -> oo
+# h -> 0
 def difference_quotient(f, t, h=1e-5):
     delta = f(t + h) - f(t)
     value = delta / h
     return value
 
-# s and s' evaluation
+# s' evaluation
 for instant in [0, 5, 7]:
     print(f"s'({instant}) = v({instant}) = ", difference_quotient(f=s, t=instant))
 
