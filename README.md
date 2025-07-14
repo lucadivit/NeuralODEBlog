@@ -1,1 +1,16 @@
 # NeuralODEBlog
+
+## Description
+
+This repository contains the code related to the article series "I ODE, You ODE and the Neural ODE".
+
+Its content is divided into different parts, each corresponding to an article in the series.
+
+* The **first part** covers derivatives, integrals, and ODEs.
+
+## Note
+This code is written in  `python 3.11`. 
+
+In order to install requirements type:
+
+`pip install -r requirements.txt`
