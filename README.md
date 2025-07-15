@@ -2,7 +2,7 @@
 
 ## Description
 
-This repository contains the code related to the article series "I ODE, You ODE and the Neural ODE".
+This repository contains the code related to the article series [I ODE, You ODE and the Neural ODE](https://www.lucadivita.it/en/teoria-matematica/i-ode-you-ode-and-the-neural-ode-1/).
 
 Its content is divided into different parts, each corresponding to an article in the series.
 
