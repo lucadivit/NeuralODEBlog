@@ -1,9 +1,5 @@
 from sympy import symbols, Function, dsolve, Eq, Derivative, pprint
 
-
-print("---- Symbolic Solution ----")
-print()
-
 t = symbols('t')
 y = Function('y')
 
