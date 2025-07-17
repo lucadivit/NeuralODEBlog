@@ -49,11 +49,3 @@ def plot_direction_and_phase_1d(f, t_range=(0, 3), y_range=(-2, 2),
     plt.tight_layout()
     plt.savefig(fn + ".png")
     plt.show()
-
-
-plot_direction_and_phase_1d(
-    f = lambda t, y: 3*y,
-    initial_conditions = list(np.arange(-0.5, 0.5 + 0.1, 0.1)),
-    fn="substitution_plot",
-    t_range=(0, 1)
-)
