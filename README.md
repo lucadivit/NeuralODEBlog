@@ -7,6 +7,7 @@ This repository contains the code related to the article series [I ODE, You ODE 
 Its content is divided into different parts, each corresponding to an article in the series.
 
 * The **first part** covers derivatives, integrals, and ODEs.
+* The **second part** covers the analytical solution of ODEs.
 
 ## Note
 This code is written in  `python 3.11`. 
