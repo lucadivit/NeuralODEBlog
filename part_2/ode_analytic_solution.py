@@ -19,7 +19,7 @@ pprint(ode_solution)
 
 plot_direction_and_phase_1d(
     f = lambda t, y: 3*y,
-    initial_conditions = list(np.arange(-0.5, 0.5 + 0.1, 0.1)),
+    initial_conditions = None, # list(np.arange(-0.5, 0.5 + 0.1, 0.1))
     fn="substitution_plot",
     t_range=(0, 1)
 )
