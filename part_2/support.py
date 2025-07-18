@@ -21,7 +21,7 @@ def plot_direction_and_phase_1d(f, t_range=(0, 3), y_range=(-2, 2),
     DT /= norm
     DY /= norm
 
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(5, 3))
     plt.quiver(T, Y, DT, DY, angles='xy', color='black', alpha=0.6, label="Campo di Direzione")
 
     if initial_conditions is not None:
@@ -32,9 +32,9 @@ def plot_direction_and_phase_1d(f, t_range=(0, 3), y_range=(-2, 2),
     # Layout
     title = inspect.getsource(f).strip().split("lambda")[-1].split(":")[-1].split(",")[0]
     title = f"y' = {title}"
-    plt.title(f"{title}", fontsize=16)
-    plt.xlabel("t", fontsize=14)
-    plt.ylabel("y", fontsize=14)
+    plt.title(f"{title}", fontsize=14)
+    plt.xlabel("t", fontsize=10)
+    plt.ylabel("y", fontsize=10)
     plt.xlim(t_min, t_max)
     plt.ylim(y_min, y_max)
     plt.grid(True)
@@ -44,9 +44,9 @@ def plot_direction_and_phase_1d(f, t_range=(0, 3), y_range=(-2, 2),
             ellipsis_handle = mlines.Line2D([], [], color='gray', linestyle='--')
             hands = handles[:3] + [ellipsis_handle] + [handles[-1]]
             labs = labels[:3] + ['y(t) = ...'] + [labels[-1]]
-            plt.legend(hands, labs, fontsize=14)
+            plt.legend(hands, labs, fontsize=8)
         else:
-            plt.legend(fontsize=14)
+            plt.legend(fontsize=8)
     plt.tight_layout()
-    plt.savefig(fn + ".svg")
+    plt.savefig(fn + ".png")
     plt.show()
