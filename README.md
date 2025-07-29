@@ -6,9 +6,9 @@ This repository contains the code related to the article series [I ODE, You ODE 
 
 Its content is divided into different parts, each corresponding to an article in the series.
 
-* The **first part** covers derivatives, integrals, and ODEs.
-* The **second part** covers the analytical solution of ODEs.
-* The **third part** covers the numerical solutions of ODEs.
+* The [**first part**](https://www.lucadivita.it/en/teoria-matematica/i-ode-you-ode-and-the-neural-ode-1/) covers derivatives, integrals, and ODEs.
+* The [**second part**](https://www.lucadivita.it/en/teoria-matematica/i-ode-you-ode-and-the-neural-ode-2/) covers the analytical solution of ODEs.
+* The [**third part**](https://www.lucadivita.it/en/teoria-matematica/i-ode-you-ode-and-the-neural-ode-3/) covers the numerical solutions of ODEs.
 
 ## Note
 This code is written in  `python 3.11`. 
