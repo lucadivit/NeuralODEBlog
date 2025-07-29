@@ -8,6 +8,7 @@ Its content is divided into different parts, each corresponding to an article in
 
 * The **first part** covers derivatives, integrals, and ODEs.
 * The **second part** covers the analytical solution of ODEs.
+* The **third part** covers the numerical solutions of ODEs.
 
 ## Note
 This code is written in  `python 3.11`. 
