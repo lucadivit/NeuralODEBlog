@@ -101,7 +101,7 @@ def heun_solver(f, y0, t0, tn, step_sizes):
             y.append(np.round(y_new, 3))
 
             print()
-            print(f"n = {n}, t_{n} = {t_new:.3f}")
+            print(f"n = {n}, t_{n} = {t_prev:.3f}, t_{n + 1} = {t_prev:.3f}")
             print(f"k1 = f({y_prev}, {t_prev:.1f}) = {k1}")
             print(f"k2 = f({y_prev} + {h}*k1, {t_new:.1f}) = {k2}")
             print(f"y({t_new:.1f}) = {y_prev} + {h}/2 * (k1 + k2) = {y_new}")
@@ -126,24 +126,24 @@ def rk4_solver(f, y0, t0, tn, step_sizes):
         for n in range(1, n_steps):
             t_prev = t[-1]
             y_prev = y[-1]
+            t_new = t_prev + h
 
             k1 = f(t_prev, y_prev)
             k2 = f(t_prev + h / 2, y_prev + h / 2 * k1)
             k3 = f(t_prev + h / 2, y_prev + h / 2 * k2)
-            k4 = f(t_prev + h, y_prev + h * k3)
+            k4 = f(t_new, y_prev + h * k3)
 
             y_new = y_prev + (h / 6) * (k1 + 2*k2 + 2*k3 + k4)
-            t_new = t_prev + h
 
             t.append(round(t_new, 3))
             y.append(np.round(y_new, 3))
 
             print()
-            print(f"n = {n}, t_{n} = {t_new:.3f}, RK4 method:")
+            print(f"n = {n}, t_{n} = {t_prev:.3f}, t_{n + 1} = {t_new:.3f}")
             print(f"k1 = f({t_prev:.3f}, {y_prev}) = {k1}")
             print(f"k2 = f({t_prev + h/2:.3f}, {y_prev + h/2 * k1}) = {k2}")
             print(f"k3 = f({t_prev + h/2:.3f}, {y_prev + h/2 * k2}) = {k3}")
-            print(f"k4 = f({t_prev + h:.3f}, {y_prev + h * k3}) = {k4}")
+            print(f"k4 = f({t_new:.3f}, {y_prev + h * k3}) = {k4}")
             print(f"y({t_new:.1f}) = {y_prev} + h/6 * (k1 + 2k2 + 2k3 + k4) = {y_new}")
 
         key = f"RK4(h={h})"
