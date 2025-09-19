@@ -6,7 +6,7 @@ from src.models import harmonic_oscillator_nets, lotka_volterra_nets
 from src.train_pred import train_mlp, predict_mlp, train_node, predict_node, plot_folder, model_folder, resume_model, optimizers
 
 BATCH_SIZE = 16
-EPOCHS = 10
+EPOCHS = 1
 LR = 1e-3
 device = "cuda" if torch.cuda.is_available() else "cpu"
 reset = False

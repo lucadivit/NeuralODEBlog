@@ -116,7 +116,6 @@ class DatasetProvider:
 
         t_tensor = torch.tensor(t_full, dtype=self.dtype)
         sol = odeint(dynamics, self.x0_t, t_tensor, method=method, rtol=self.r_tol, atol=self.a_tol)
-        print(sol)
         sol_np = sol.detach().cpu().numpy()
 
         mask = np.isin(t_full, t_grid_np)
