@@ -1,5 +1,5 @@
-from typing import TypedDict, Optional, Callable
-import numpy as np, torch
+from typing import TypedDict, Optional, Callable, Tuple, List
+import numpy as np, torch, os, cv2
 from torch.utils.data import TensorDataset, DataLoader
 from torchdiffeq import odeint
 
@@ -212,5 +212,46 @@ class DatasetProvider:
             dl = DataLoader(ds, batch_size=batch_size)
             out[key] = {"dataset": dl}
         return out
+
+    @staticmethod
+    def create_video_from_images(image_paths: List[str], fn: str, fps: int = 12, size: Optional[Tuple[int, int]] = None, sort_paths: bool = True) -> None:
+        if not image_paths:
+            raise ValueError("La lista delle immagini è vuota.")
+
+        if sort_paths:
+            image_paths = sorted(image_paths)
+
+        first = cv2.imread(image_paths[0], cv2.IMREAD_UNCHANGED)
+        if first is None:
+            raise ValueError(f"Impossibile leggere l'immagine: {image_paths[0]}")
+
+        if first.shape[-1] == 4:
+            first = cv2.cvtColor(first, cv2.COLOR_BGRA2BGR)
+
+        h0, w0 = first.shape[:2]
+        if size is None:
+            size = (w0, h0)
+
+        writer = cv2.VideoWriter(fn, -1, fps, size)
+
+        if not writer.isOpened():
+            raise RuntimeError("Impossibile aprire il VideoWriter. Verifica codec/estensione file.")
+
+        try:
+            for p in image_paths:
+                img = cv2.imread(p, cv2.IMREAD_UNCHANGED)
+                if img is None:
+                    raise ValueError(f"Impossibile leggere l'immagine: {p}")
+
+                if img.ndim == 3 and img.shape[-1] == 4:
+                    img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
+
+                if (img.shape[1], img.shape[0]) != size:
+                    img = cv2.resize(img, size, interpolation=cv2.INTER_AREA)
+
+                writer.write(img)
+        finally:
+            writer.release()
+
 
 

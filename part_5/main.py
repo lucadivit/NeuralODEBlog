@@ -1,4 +1,4 @@
-import os.path, torch, shutil
+import os.path, torch, shutil, glob
 
 from src.HarmonicOscillatorData import HarmonicOscillator
 from src.LotkaVolterraData import LotkaVolterra
@@ -9,7 +9,7 @@ BATCH_SIZE = 16
 EPOCHS = 10
 LR = 1e-3
 device = "cuda" if torch.cuda.is_available() else "cpu"
-reset = True
+reset = False
 
 problem = "lotka-volterra"
 if problem == "lotka-volterra":
@@ -72,10 +72,12 @@ node = node.to(device).to(dtype=data_creator.dtype)
 best_mlp = train_mlp(mlp, train_loader, resamp_loader, epochs=EPOCHS, lr=LR, device=device, resume=f"{model_folder}/{mlp.name}/last.pt")
 preds_mlp, tgts_mlp = predict_mlp(model=best_mlp, loader=extra_loader, device=device)
 DataCreator.plot_predictions(preds_mlp, tgts_mlp, t_grid, fn=mlp_pred_fn)
+DataCreator.create_video_from_images(image_paths=glob.glob(f"{plot_folder}/{mlp.name}/*.png"), fn=f"{mlp.name}.mp4", fps=5)
 
 # NODE
 best_node = train_node(node, train_loader, resamp_loader, epochs=EPOCHS, lr=LR, device=device, resume=f"{model_folder}/{node.name}/last.pt",
                        rtol=data_creator.get_rtol(), atol=data_creator.get_atol())
 preds_node, tgts_node = predict_node(model=best_node, loader=extra_loader, device=device, rtol=data_creator.get_rtol(), atol=data_creator.get_atol())
 DataCreator.plot_predictions(preds_node, tgts_node, t_grid, fn=node_pred_fn)
+DataCreator.create_video_from_images(image_paths=glob.glob(f"{plot_folder}/{node.name}/*.png"), fn=f"{node.name}.mp4", fps=5)
 

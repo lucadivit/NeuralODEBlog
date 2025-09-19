@@ -1,6 +1,5 @@
 import numpy as np, matplotlib.pyplot as plt, torch
-from torchdiffeq import odeint
-from .Data import DataObject, DatasetProvider
+from .Data import DatasetProvider
 from collections import OrderedDict
 
 class LotkaVolterra(DatasetProvider):
