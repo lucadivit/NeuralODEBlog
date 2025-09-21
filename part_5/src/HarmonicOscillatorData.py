@@ -36,7 +36,7 @@ class HarmonicOscillator(DatasetProvider):
 
     @staticmethod
     def get_method() -> str:
-        return "rk4"
+        return "dopri5"
 
     def dynamics(self, t: torch.Tensor, state: torch.Tensor) -> torch.Tensor:
         x1, x2 = state[0], state[1]
