@@ -1,6 +1,7 @@
 import numpy as np, matplotlib.pyplot as plt, torch
 from .Data import DatasetProvider
 from collections import OrderedDict
+from typing import Optional, Dict
 
 class LotkaVolterra(DatasetProvider):
 
@@ -149,3 +150,80 @@ class LotkaVolterra(DatasetProvider):
             plt.savefig(fn, format='svg')
         else:
             plt.show()
+
+    @staticmethod
+    def plot_dataset(loaders: Dict):
+
+        style_noised = {"color": "darkorange", "alpha": 0.7}
+        style_true = {"color": "navy", "alpha": 0.9}
+
+        def collect_split(split_key: str):
+            if split_key not in loaders:
+                return None
+            dl = loaders[split_key]["dataset"]
+            xs_i, xs_tgt, ts_i, ts_tgt = [], [], [], []
+            for batch in dl:
+                x_i, x_tgt, _, t_i, t_tgt = batch
+                xs_i.append(x_i.detach().cpu())
+                xs_tgt.append(x_tgt.detach().cpu())
+                ts_i.append(t_i.detach().cpu())
+                ts_tgt.append(t_tgt.detach().cpu())
+            if not xs_i:
+                return None
+            x_i = torch.cat(xs_i, dim=0).numpy()
+            x_tgt = torch.cat(xs_tgt, dim=0).numpy()
+            t_i = torch.cat(ts_i, dim=0).numpy()
+            t_tgt = torch.cat(ts_tgt, dim=0).numpy()
+            return x_i, x_tgt, t_i, t_tgt
+
+        splits_data = {}
+        for key in ("train", "resamp"):
+            data = collect_split(key)
+            if data is not None:
+                splits_data[key] = data
+
+        any_key = next(iter(splits_data.keys()))
+        D = splits_data[any_key][0].shape[-1]
+
+        for split_key, (x_i, x_tgt, t_i, t_tgt) in splits_data.items():
+            fig, axes = plt.subplots(nrows=3, ncols=1, figsize=(10, 10), sharex=False)
+            fig.suptitle(f"{split_key.upper()} dataset", fontsize=13)
+
+            ax0 = axes[0]
+            order_i = np.argsort(t_i)
+            order_tgt = np.argsort(t_tgt)
+            ax0.plot(t_i[order_i], x_i[order_i, 0], linestyle="-", label="noised", **style_noised)
+            ax0.plot(t_tgt[order_tgt], x_tgt[order_tgt, 0], linestyle="-", label="true", **style_true)
+            ax0.set_ylabel("x1")
+            ax0.grid(True, linestyle="--", linewidth=0.5, alpha=0.6)
+            ax0.legend(loc="best", fontsize=9, frameon=True)
+
+            if D >= 2:
+                ax1 = axes[1]
+                order_i = np.argsort(t_i)
+                order_tgt = np.argsort(t_tgt)
+                ax1.plot(t_i[order_i], x_i[order_i, 1], linestyle="-", **style_noised)
+                ax1.plot(t_tgt[order_tgt], x_tgt[order_tgt, 1], linestyle="-", **style_true)
+                ax1.set_ylabel("x2")
+                ax1.grid(True, linestyle="--", linewidth=0.5, alpha=0.6)
+            else:
+                axes[1].axis("off")
+
+            ax2 = axes[2]
+            if D >= 2:
+                ax2.plot(x_i[:, 0], x_i[:, 1], linestyle="-", label="noised", **style_noised)
+                ax2.plot(x_tgt[:, 0], x_tgt[:, 1], linestyle="-", label="true", **style_true)
+                ax2.set_xlabel("x1")
+                ax2.set_ylabel("x2")
+                ax2.grid(True, linestyle="--", linewidth=0.5, alpha=0.6)
+                ax2.legend(loc="best", fontsize=9, frameon=True)
+            else:
+                ax2.axis("off")
+
+            fig.tight_layout(rect=(0, 0, 1, 0.95))
+            fig.savefig(f"dataset_{LotkaVolterra.get_name()}_{split_key}.svg", format="svg")
+            plt.close(fig)
+
+
+
+
