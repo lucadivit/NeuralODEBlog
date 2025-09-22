@@ -6,12 +6,13 @@ from src.models import harmonic_oscillator_nets, lotka_volterra_nets
 from src.train_pred import train_mlp, predict_mlp, train_node, predict_node, plot_folder, model_folder, resume_model, optimizers
 
 BATCH_SIZE = 16
-EPOCHS = 50
+EPOCHS = 100
 LR = 1e-3
 device = "cuda" if torch.cuda.is_available() else "cpu"
-reset = False
+print(f"Using Device {device}")
+reset = True
 
-problem = "lotka-volterra"
+problem = "harmonic-oscillator"
 if problem == "lotka-volterra":
     DataCreator = LotkaVolterra
     params = {
