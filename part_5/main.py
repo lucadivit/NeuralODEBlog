@@ -10,7 +10,7 @@ EPOCHS = 100
 LR = 1e-3
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using Device {device}")
-reset = True
+reset = False
 
 problem = "harmonic-oscillator"
 if problem == "lotka-volterra":
