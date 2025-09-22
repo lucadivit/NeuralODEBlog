@@ -1,7 +1,7 @@
 import numpy as np, matplotlib.pyplot as plt, torch
 from .Data import DatasetProvider
 from collections import OrderedDict
-from typing import Optional, Dict
+from typing import Dict
 
 class LotkaVolterra(DatasetProvider):
 

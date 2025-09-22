@@ -252,5 +252,25 @@ class DatasetProvider:
         finally:
             writer.release()
 
+    @staticmethod
+    def print_dataset_with_times(ds: DataLoader):
+        x_i, x_next, dt, t_i, t_next = ds.dataset.tensors
+        t_i = t_i.squeeze(-1) if t_i.ndim > 1 else t_i
+        t_next = t_next.squeeze(-1) if t_next.ndim > 1 else t_next
+
+        print(f"{'idx':<5} {'t_i':<8} {'x_i':<20} {'t_next':<8} {'x_next':<20} {'dt':<8}")
+        print("-" * 80)
+        for idx in range(len(t_i)):
+            xi_str = np.array2string(x_i[idx].cpu().numpy(), precision=3, suppress_small=True, max_line_width=20)
+            xnext_str = np.array2string(x_next[idx].cpu().numpy(), precision=3, suppress_small=True, max_line_width=20)
+
+            print(f"{idx:<5} "
+                  f"{float(t_i[idx]):<8.3f} {xi_str:<20} "
+                  f"{float(t_next[idx]):<8.3f} {xnext_str:<20} "
+                  f"{float(dt[idx]):<8.3f}")
+
+
+
+
 
 
