@@ -46,6 +46,10 @@ def save_rollout_plot(t, pred, tgt, path, fn):
 
     handles, labels = axs[0].get_legend_handles_labels()
     fig.legend(handles, labels, loc="upper left", ncol=2, frameon=False)
+
+    epoch = fn.split("_")[-1].split(".")[0]
+    fig.suptitle(f"Epoch {epoch}", fontsize=14)
+
     plt.tight_layout()
     plt.savefig(path + fn)
     plt.close(fig)
@@ -90,7 +94,7 @@ def train_mlp(model, train_loader, resamp_loader, device: str ="cpu", epochs: in
     if epochs == 0: return
     model.to(device)
     crit = nn.MSELoss()
-    opt = optimizers["mlp"](**{"params": model.parameters(), "lr": lr}) #Adam(model.parameters(), lr=lr)
+    opt = optimizers["mlp"](**{"params": model.parameters(), "lr": lr})
     start_epoch, best_val = resume_model(model=model, opt=opt, resume=resume, device=device)
 
     best_path, last_path = get_model_paths(model)
@@ -173,7 +177,6 @@ def train_node(model, train_loader, resamp_loader, rtol: float, atol: float, dev
     model.to(device)
     crit = nn.MSELoss()
     opt = optimizers["node"](**{"params": model.parameters(), "lr": lr})
-    # opt  = Adam(model.parameters(), lr=lr)
     start_epoch, best_val = resume_model(model=model, opt=opt, resume=resume, device=device)
     best_path, last_path = get_model_paths(model)
 
@@ -187,7 +190,7 @@ def train_node(model, train_loader, resamp_loader, rtol: float, atol: float, dev
             t_i    = t_i.to(device).squeeze(-1)
             t_next = t_next.to(device).squeeze(-1)
 
-            opt.zero_grad(set_to_none=True)
+            opt.zero_grad()
             preds = []
             for j in range(x_i.size(0)):
                 tspan = torch.stack((t_i[j], t_next[j])).to(device=x_i.device, dtype=x_i.dtype)

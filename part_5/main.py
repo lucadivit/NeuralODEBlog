@@ -10,9 +10,9 @@ EPOCHS = 100
 LR = 1e-3
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using Device {device}")
-reset = False
+reset = True
 
-problem = "harmonic-oscillator"
+problem = "lotka-volterra"
 if problem == "lotka-volterra":
     DataCreator = LotkaVolterra
     params = {
