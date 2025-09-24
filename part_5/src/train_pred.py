@@ -136,8 +136,8 @@ def predict_mlp(model, loader, device="cpu") -> tuple[np.ndarray, np.ndarray]:
     ds = loader.dataset
     x_i, x_next, _dt, t_i, t_next = ds.tensors
     t_i, t_next = t_i.squeeze(-1), t_next.squeeze(-1)
-    t_grid = torch.cat([t_i[:1], t_next], 0).to(device)        # [T]
-    x = x_i[0].to(device).unsqueeze(0)                         # [1,dim]
+    t_grid = torch.cat([t_i[:1], t_next], 0).to(device)
+    x = x_i[0].to(device).unsqueeze(0)
     traj = [x.squeeze(0).cpu().numpy()]
     for k in range(t_grid.size(0)-1):
         dt = (t_grid[k+1]-t_grid[k]).view(1,1).to(device).to(x.dtype)
