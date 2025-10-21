@@ -39,8 +39,8 @@ class LotkaVolterra(DatasetProvider):
         return torch.stack([x1dt, x2dt]).to(self.dtype)
 
     def plot(self, data_obj: dict, show_noised: bool = True, show_true: bool = True,
-             show_resamp: bool = True, show_extra: bool = True, figsize: tuple[int, int] = (10, 8),
-             save: bool = True):
+             show_resamp: bool = True, show_extra: bool = True, interpolate: bool = False,
+             figsize: tuple[int, int] = (10, 8), save: bool = True):
 
         if not (show_true or show_resamp or show_extra or show_noised):
             raise Exception("Almeno uno tra 'show_true', 'show_resamp', 'show_extra', 'show_noised' deve essere True")
@@ -59,49 +59,68 @@ class LotkaVolterra(DatasetProvider):
         fig, axs = plt.subplots(2, 2, figsize=figsize)
         ax1, ax2, ax3, ax4 = axs[0, 0], axs[1, 0], axs[0, 1], axs[1, 1]
 
+        # funzione ausiliaria per disegnare linee o punti
+        def plot_data(ax, t, x, label, color, marker, alpha=1.0):
+            if interpolate:
+                ax.plot(t, x, '-', label=label, color=color, alpha=alpha)
+            else:
+                ax.plot(t, x, marker, label=label, color=color, alpha=alpha)
+
         # x1(t)
         if show_true:
-            ax1.plot(t_train, x_train_true[:, 0], 'o', label="train true x1", color='blue')
+            plot_data(ax1, t_train, x_train_true[:, 0], "train true x1", 'blue', 'o')
             if show_noised:
-                ax1.plot(t_train, x_train_noised[:, 0], 'o', label="train noised x1", color='cyan', alpha=0.6)
+                plot_data(ax1, t_train, x_train_noised[:, 0], "train noised x1", 'cyan', 'o', alpha=0.6)
         if show_resamp:
-            ax1.plot(t_test_resamp, x_test_resamp_true[:, 0], 'x', label="resamp true x1", color='red')
+            plot_data(ax1, t_test_resamp, x_test_resamp_true[:, 0], "resamp true x1", 'red', 'x')
             if show_noised:
-                ax1.plot(t_test_resamp, x_test_resamp_noised[:, 0], 'x', label="resamp noised x1", color='purple')
+                plot_data(ax1, t_test_resamp, x_test_resamp_noised[:, 0], "resamp noised x1", 'purple', 'x')
         if show_extra:
-            ax1.plot(t_test_extra, x_test_extra_true[:, 0], '-', label="extra true x1", color='orange')
-        ax1.set_xlabel("time t"); ax1.set_ylabel("x1")
+            plot_data(ax1, t_test_extra, x_test_extra_true[:, 0], "extra true x1", 'orange', '-', alpha=1.0)
+        ax1.set_xlabel("time t");
+        ax1.set_ylabel("x1")
 
         # x2(t)
         if show_true:
-            ax2.plot(t_train, x_train_true[:, 1], 'o', label="train true x2", color='blue')
+            plot_data(ax2, t_train, x_train_true[:, 1], "train true x2", 'blue', 'o')
             if show_noised:
-                ax2.plot(t_train, x_train_noised[:, 1], 'o', label="train noised x2", color='cyan', alpha=0.6)
+                plot_data(ax2, t_train, x_train_noised[:, 1], "train noised x2", 'cyan', 'o', alpha=0.6)
         if show_resamp:
-            ax2.plot(t_test_resamp, x_test_resamp_true[:, 1], 'x', label="resamp true x2", color='red')
+            plot_data(ax2, t_test_resamp, x_test_resamp_true[:, 1], "resamp true x2", 'red', 'x')
             if show_noised:
-                ax2.plot(t_test_resamp, x_test_resamp_noised[:, 1], 'x', label="resamp noised x2", color='purple')
+                plot_data(ax2, t_test_resamp, x_test_resamp_noised[:, 1], "resamp noised x2", 'purple', 'x')
         if show_extra:
-            ax2.plot(t_test_extra, x_test_extra_true[:, 1], '-', label="extra true x2", color='orange')
-        ax2.set_xlabel("time t"); ax2.set_ylabel("x2")
+            plot_data(ax2, t_test_extra, x_test_extra_true[:, 1], "extra true x2", 'orange', '-', alpha=1.0)
+        ax2.set_xlabel("time t");
+        ax2.set_ylabel("x2")
 
         # phase space
+        def plot_phase(ax, x, label, color, marker, alpha=1.0):
+            if interpolate:
+                ax.plot(x[:, 0], x[:, 1], '-', label=label, color=color, alpha=alpha)
+            else:
+                ax.plot(x[:, 0], x[:, 1], marker, label=label, color=color, alpha=alpha)
+
         if show_true:
-            ax3.plot(x_train_true[:, 0], x_train_true[:, 1], 'o', label="train true", color='blue')
+            plot_phase(ax3, x_train_true, "train true", 'blue', 'o')
             if show_noised:
-                ax3.plot(x_train_noised[:, 0], x_train_noised[:, 1], 'o', label="train noised", color='cyan', alpha=0.6)
+                plot_phase(ax3, x_train_noised, "train noised", 'cyan', 'o', alpha=0.6)
         if show_resamp:
-            ax3.plot(x_test_resamp_true[:, 0], x_test_resamp_true[:, 1], 'x', label="resamp true", color='red')
+            plot_phase(ax3, x_test_resamp_true, "resamp true", 'red', 'x')
             if show_noised:
-                ax3.plot(x_test_resamp_noised[:, 0], x_test_resamp_noised[:, 1], 'x', label="resamp noised", color='purple')
+                plot_phase(ax3, x_test_resamp_noised, "resamp noised", 'purple', 'x')
         if show_extra:
-            ax3.plot(x_test_extra_true[:, 0], x_test_extra_true[:, 1], '-', label="extra true", color='orange')
-        ax3.set_xlabel("x1"); ax3.set_ylabel("x2"); ax3.set_title("Phase space")
+            plot_phase(ax3, x_test_extra_true, "extra true", 'orange', '-', alpha=1.0)
+        ax3.set_xlabel("x1")
+        ax3.set_ylabel("x2")
+        ax3.set_title("Phase space")
 
         fig.delaxes(ax4)
 
         handles, labels = [], []
-        h, l = ax1.get_legend_handles_labels(); handles += h; labels += l
+        h, l = ax1.get_legend_handles_labels()
+        handles += h
+        labels += l
         by_label = OrderedDict(zip(labels, handles))
         fig.legend(by_label.values(), by_label.keys(), loc="lower right", ncol=1, frameon=False)
 

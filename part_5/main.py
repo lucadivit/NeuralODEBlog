@@ -41,6 +41,7 @@ else:
 data_fn = f"{DataCreator.get_name()}.pt"
 mlp_pred_fn = f"{DataCreator.get_name()}_predictions_mlp.svg"
 node_pred_fn = f"{DataCreator.get_name()}_predictions_node.svg"
+img_fn = f"{DataCreator.get_name()}.svg"
 
 if reset:
     shutil.rmtree(model_folder, ignore_errors=True)
@@ -48,11 +49,13 @@ if reset:
     if os.path.isfile(data_fn): os.remove(data_fn)
     if os.path.isfile(mlp_pred_fn): os.remove(mlp_pred_fn)
     if os.path.isfile(node_pred_fn): os.remove(node_pred_fn)
+    if os.path.isfile(img_fn): os.remove(img_fn)
 
 data_creator = DataCreator(**params)
 if not os.path.isfile(f"{DataCreator.get_name()}.pt"):
     print(f"Creating Dataset for {DataCreator.get_name()}")
     data = data_creator(method=DataCreator.get_method(), dynamics=data_creator.dynamics)
+    data_creator.plot(data_obj=data, show_resamp=False, interpolate=True)
     data = data_creator.prepare_data(data, batch_size=BATCH_SIZE, device=device, train_K_max=5)
     DataCreator.save(data, data_fn)
 else:
